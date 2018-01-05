@@ -1,0 +1,17 @@
+{
+  "name": "indeed",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "clui": "^0.3.6",
+    "csv": "^2.0.0",
+    "indeed-scraper": "^2.0.2",
+    "minimist": "^1.2.0"
+  }
+}
