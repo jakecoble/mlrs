@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "indeed": "./index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,6 +15,6 @@
     "clui": "^0.3.6",
     "csv": "^2.0.0",
     "indeed-scraper": "^2.0.2",
-    "minimist": "^1.2.0"
+    "yargs": "^10.0.3"
   }
 }
