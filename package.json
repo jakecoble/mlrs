@@ -12,11 +12,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^3.5.1",
     "clui": "^0.3.6",
     "csv": "^2.0.0",
     "figlet": "^1.2.0",
     "gradient-string": "^1.0.0",
     "indeed-scraper": "^2.0.2",
+    "puppeteer": "^0.13.0",
     "yargs": "^10.0.3"
   }
 }
