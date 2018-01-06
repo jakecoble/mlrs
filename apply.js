@@ -8,14 +8,18 @@ const parse = Promise.promisify(require('csv-parse'));
 
 const readFile = Promise.promisify(fs.readFile);
 
-function applyToRecord(record) {
+const config = require('./config.js');
+
+var browserLoad = null;
+
+function applyToRecord (record, interactive) {
   var url = record[2];
 
-  puppeteer.launch({ headless: false })
+  browserLoad
     .then(async browser => {
       const page = await browser.newPage();
       await page.goto(url);
-      await browser.close();
+      page.click(config.applyButtonSelector);
     });
 }
 
@@ -27,9 +31,11 @@ function apply (argv) {
   banner = gradient(['green', 'yellow']).multiline(banner);
   console.log(banner);
 
+  browserLoad = puppeteer.launch({ headless: !argv.i });
+
   readFile(argv.o || 'jobs.csv')
     .then(contents => parse(contents, { delimiter: ',' }))
-    .then(records => records.forEach(applyToRecord));
+    .then(records => records.forEach(record => applyToRecord(record, argv.i)));
 }
 
 module.exports = {
@@ -38,7 +44,8 @@ module.exports = {
   builder: yargs => {
     yargs
       .alias({
-        'n': 'dry-run'
+        'n': 'dry-run',
+        'i': 'interactive'
       })
       .positional('file', {
         describe: 'CSV file to read listings from',
