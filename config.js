@@ -1,49 +1,33 @@
 const config = {
-  applyButtonSelectors: [
-    'a#applyButton',
-    'a.indeed-apply-button'
-  ],
+  submitSelector: '#submit_app',
 
-  _mapping: {
-    fullName: ['input#input-applicant\.name', 'input[name=firstName]'],
-    email: ['input[name=emailAddress]'],
-    phone: ['input[data-form-error-label=phoneNumber]']
+  errorSelector: '.field-error-msg',
+
+  mapping: {
+    'input#first_name': 'firstName',
+    'input#last_name': 'lastName',
+    'input#email': 'email',
+    'input#phone': 'phone',
+    'form#s3_upload_for_resume>input[type=file]': 'resume',
+    '#job_application_answers_attributes_0_text_value': 'address',
+    '#job_application_answers_attributes_3_text_value': 'referral'
   },
 
-  _user: {
+  user: {
     firstName: 'Jacob',
     lastName: 'Coble',
     email: 'j@kecoble.com',
     phone: '4846249170',
+    address: '2627 Piedmont Ave, Berkeley, CA 94704',
+    referral: 'Indeed',
+    resume: '/home/jake/documents/resume.docx',
 
     get fullName () {
       return this.firstName + ' ' + this.lastName;
     }
   },
 
-  _data: {},
-
-  get formSelectors () {
-    var selectors = [];
-
-    for (let userInfo in this._mapping) {
-      selectors = selectors.concat(this._mapping[userInfo]);
-    }
-
-    return selectors;
-  },
-
-  dataForSelector (selector) {
-    return this._data[selector];
-  }
+  formCheckSelector: 'form[action^="https://boards.greenhouse.io"]'
 };
-
-for (let userInfo in config._mapping) {
-  var selectors = config._mapping[userInfo];
-
-  selectors.forEach(s => {
-    config._data[s] = config._user[userInfo];
-  });
-}
 
 module.exports = config;

@@ -10,17 +10,28 @@ const config = require('./config.js');
 var browserLoad = null;
 
 async function fillForm (page) {
-  var selectors = config.formSelectors;
+  var p = null;
 
-  var promises = selectors.map(selector => {
-    return page.waitForSelector(selector, {
-        visible: true,
-        timeout: 10000
-      })
-      .then(() => page.type(selector, config.dataForSelector(selector)));
-  });
+  Object.keys(config.mapping).forEach(selector => {
+    var field = config.mapping[selector];
+    var data = config.user[field];
 
-  return Promise.all(promises).catch(err => console.log(err));
+    if (field !== 'resume') {
+        if (p === null) {
+          p = page.waitForSelector(selector)
+            .then(() => page.type(selector, data));
+        } else {
+          p = p.then(() => page.waitForSelector(selector))
+            .then(() => page.type(selector, data));
+        }
+    } else {
+      p = p.then(() => page.waitForSelector(selector))
+        .then(() => page.$(selector))
+        .then(el => el.uploadFile(data));
+    }
+    });
+
+  return p;
 }
 
 function applyToRecord (record, interactive) {
@@ -29,9 +40,10 @@ function applyToRecord (record, interactive) {
   browserLoad
     .then(async browser => {
       const page = await browser.newPage();
-      await page.goto(url);
-      page.click(config.applyButtonSelectors.join(', '))
+      page.goto(url)
         .then(() => fillForm(page))
+        .then(() => page.waitForSelector(config.submitSelector + ':enabled'))
+        .then(() => page.click(config.submitSelector))
         .catch(err => console.log(err));
     });
 }
