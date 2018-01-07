@@ -12,6 +12,20 @@ const config = require('./config.js');
 
 var browserLoad = null;
 
+async function fillForm (page) {
+  var selectors = config.formSelectors;
+
+  var promises = selectors.map(selector => {
+    return page.waitForSelector(selector, {
+        visible: true,
+        timeout: 10000
+      })
+      .then(() => page.type(selector, config.dataForSelector(selector)));
+  });
+
+  return Promise.all(promises).catch(err => console.log(err));
+}
+
 function applyToRecord (record, interactive) {
   var url = record[2];
 
@@ -19,7 +33,9 @@ function applyToRecord (record, interactive) {
     .then(async browser => {
       const page = await browser.newPage();
       await page.goto(url);
-      page.click(config.applyButtonSelector);
+      page.click(config.applyButtonSelectors.join(', '))
+        .then(() => fillForm(page))
+        .catch(err => console.log(err));
     });
 }
 
