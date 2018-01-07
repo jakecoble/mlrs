@@ -10,24 +10,24 @@ const config = require('./config.js');
 var browserLoad = null;
 
 async function fillForm (page) {
-  var p = null;
+  var p = new Promise.resolve();
 
   Object.keys(config.mapping).forEach(selector => {
     var field = config.mapping[selector];
     var data = config.user[field];
 
     if (field !== 'resume') {
-        if (p === null) {
-          p = page.waitForSelector(selector)
-            .then(() => page.type(selector, data));
-        } else {
-          p = p.then(() => page.waitForSelector(selector))
-            .then(() => page.type(selector, data));
-        }
+        p = p.finally(() => page.waitForSelector(selector))
+            .catch(err => console.log('Failed to acquire selector %s. %s', selector, err))
+            .then(() => page.type(selector, data))
+            .catch(err => console.log('Failed to input data on selector %s. %s', selector, err));
     } else {
-      p = p.then(() => page.waitForSelector(selector))
+      p = p.finally(() => page.waitForSelector(selector))
+        .catch(err => console.log('Failed to acquire selector %s. %s', selector, err))
         .then(() => page.$(selector))
-        .then(el => el.uploadFile(data));
+        .catch(err => console.log('Failed to acquire selector %s. %s', selector, err))
+        .then(el => el.uploadFile(data))
+        .catch(err => console.log('Failed to input data on selector %s. %s', selector, err));
     }
     });
 
@@ -44,7 +44,7 @@ function applyToRecord (record, interactive) {
         .then(() => fillForm(page))
         .then(() => page.waitForSelector(config.submitSelector + ':enabled'))
         .then(() => page.click(config.submitSelector))
-        .catch(err => console.log(err));
+        .catch(err => console.log('Failed to submit application. %s', err));
     });
 }
 

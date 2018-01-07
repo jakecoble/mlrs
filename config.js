@@ -10,7 +10,7 @@ const config = {
     'input#phone': 'phone',
     'form#s3_upload_for_resume>input[type=file]': 'resume',
     '#job_application_answers_attributes_0_text_value': 'address',
-    '#job_application_answers_attributes_3_text_value': 'referral'
+    '#custom_fields > div:last-child > label > input[type=text]': 'referral'
   },
 
   user: {
