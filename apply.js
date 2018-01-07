@@ -1,6 +1,3 @@
-const figlet = require('figlet');
-const gradient = require('gradient-string');
-
 const Promise = require('bluebird');
 const fs = require('fs');
 const puppeteer = require('puppeteer');
@@ -40,13 +37,6 @@ function applyToRecord (record, interactive) {
 }
 
 function apply (argv) {
-  var banner = figlet.textSync('Indeed Apply', {
-    font: 'Poison'
-  });
-
-  banner = gradient(['green', 'yellow']).multiline(banner);
-  console.log(banner);
-
   browserLoad = puppeteer.launch({ headless: !argv.i });
 
   readFile(argv.o || 'jobs.csv')
@@ -55,7 +45,7 @@ function apply (argv) {
 }
 
 module.exports = {
-  command: 'apply [file]',
+  command: 'fire [file]',
   describe: 'submit applications for compatible job listings',
   builder: yargs => {
     yargs
