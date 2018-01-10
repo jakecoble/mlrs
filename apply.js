@@ -8,6 +8,7 @@ const readFile = Promise.promisify(fs.readFile);
 const config = require('./config.js');
 
 var browserLoad = null;
+var resolveWait = null;
 
 async function getField (page, label) {
   return page.evaluate(l => l.getAttribute('for'), label)
@@ -61,9 +62,18 @@ async function applyToRecord (record, interactive) {
 
   return browserLoad
     .then(async browser => {
+      browser.on('targetdestroyed', target => {
+        if (target.page()) {
+          resolveWait();
+        }
+      })
       const page = await browser.newPage();
       return page.goto(url)
-        .then(() => fillForm(page));
+        .then(() => fillForm(page))
+        .then(() => new Promise((resolve, reject) => {
+          if (!interactive) resolve();
+          resolveWait = resolve;
+        }));
         // .then(() => page.waitForSelector(config.submitSelector + ':enabled'))
         // .then(() => page.click(config.submitSelector))
         // .then(() => page.waitForSelector(config.completionSelector))
