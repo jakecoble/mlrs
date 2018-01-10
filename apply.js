@@ -56,13 +56,13 @@ async function fillForm (page) {
     .then(upload => upload.uploadFile(config.user.resume));
 }
 
-function applyToRecord (record, interactive) {
+async function applyToRecord (record, interactive) {
   var url = record[2];
 
-  browserLoad
+  return browserLoad
     .then(async browser => {
       const page = await browser.newPage();
-      page.goto(url)
+      return page.goto(url)
         .then(() => fillForm(page));
         // .then(() => page.waitForSelector(config.submitSelector + ':enabled'))
         // .then(() => page.click(config.submitSelector))
@@ -76,7 +76,9 @@ function apply (argv) {
 
   readFile(argv.o || 'jobs.csv')
     .then(contents => parse(contents, { delimiter: ',' }))
-    .then(records => records.forEach(record => applyToRecord(record, argv.i)));
+    .then(records => records.reduce((p, record) => {
+      return p.then(() => applyToRecord(record, argv.i));
+    }, new Promise.resolve()));
 }
 
 module.exports = {
