@@ -9,6 +9,17 @@ const config = require('./config.js');
 
 var browserLoad = null;
 
+async function getField (page, label) {
+  return page.evaluate(l => l.getAttribute('for'), label)
+    .then(forId => {
+      if (forId) {
+        return page.$('input#' + forId);
+      } else {
+        return label.$('input[type=text]');
+      }
+    });
+}
+
 async function getFieldValue (labelText) {
   return new Promise((resolve, reject) => {
     Object.keys(config.regex).forEach(key => {
@@ -20,7 +31,7 @@ async function getFieldValue (labelText) {
       }
     });
 
-    reject('no matching user data found');
+    reject(`no user data found for form label "${labelText.trim()}"`);
   });
 }
 
@@ -28,22 +39,19 @@ async function fillFormFields (page, labels) {
   var p = new Promise.resolve();
 
   labels.forEach(label => {
-    p.then(() => page.evaluate(l => l.innerText, label))
-      .then(labelText => getFieldValue(labelText))
-      .then(fieldValue => console.log(fieldValue));
+    p = p.then(() => page.evaluate(l => l.innerText, label))
+      .then(labelText => Promise.all([getField(page, label), getFieldValue(labelText)]))
+      .then(([input, value]) => input.type(value))
+      .catch(err => console.log(err));
   });
 
   return p;
 }
 
 async function fillForm (page) {
-  var p = new Promise.resolve();
-
-  p.then(() => page.waitForSelector(config.formSelector))
+  return page.waitForSelector(config.formSelector)
     .then(() => page.$$(config.formSelector + ' label'))
     .then(labels => fillFormFields(page, labels));
-
-  return p;
 }
 
 function applyToRecord (record, interactive) {

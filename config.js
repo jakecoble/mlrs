@@ -8,7 +8,7 @@ const config = {
     'Last Name': 'lastName',
     'Email': 'email',
     'Phone': 'phone',
-    'How did you hear about this job\\?': 'referral'
+    'How did you hear about this job\?': 'referral'
   },
 
   user: {
