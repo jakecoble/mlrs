@@ -3,14 +3,12 @@ const config = {
 
   errorSelector: '.field-error-msg',
 
-  mapping: {
-    'input#first_name': 'firstName',
-    'input#last_name': 'lastName',
-    'input#email': 'email',
-    'input#phone': 'phone',
-    'form#s3_upload_for_resume>input[type=file]': 'resume',
-    '#job_application_answers_attributes_0_text_value': 'address',
-    '#custom_fields > div:last-child > label > input[type=text]': 'referral'
+  regex: {
+    'First Name': 'firstName',
+    'Last Name': 'lastName',
+    'Email': 'email',
+    'Phone': 'phone',
+    'How did you hear about this job\\?': 'referral'
   },
 
   user: {
@@ -20,14 +18,10 @@ const config = {
     phone: '4846249170',
     address: '2627 Piedmont Ave, Berkeley, CA 94704',
     referral: 'Indeed',
-    resume: '/home/jake/documents/resume.docx',
-
-    get fullName () {
-      return this.firstName + ' ' + this.lastName;
-    }
+    resume: '/home/jake/documents/resume.docx'
   },
 
-  formCheckSelector: 'form[action^="https://boards.greenhouse.io"]'
+  formSelector: 'form[action^="https://boards.greenhouse.io"]'
 };
 
 module.exports = config;
