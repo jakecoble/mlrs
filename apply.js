@@ -51,7 +51,9 @@ async function fillFormFields (page, labels) {
 async function fillForm (page) {
   return page.waitForSelector(config.formSelector)
     .then(() => page.$$(config.formSelector + ' label'))
-    .then(labels => fillFormFields(page, labels));
+    .then(labels => fillFormFields(page, labels))
+    .then(() => page.$(config.resumeSelector))
+    .then(upload => upload.uploadFile(config.user.resume));
 }
 
 function applyToRecord (record, interactive) {
