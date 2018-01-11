@@ -14,8 +14,34 @@ class Applier extends Transform {
   }
 
   _transform (chunk, encoding, callback) {
+    if (chunk[6] === 'applied') {
+      this.callback();
+    }
+
+    this.record = chunk;
     this.applyToRecord(chunk);
-    this.callback = callback;
+    this.callback = () => callback(null, this.record);
+  }
+
+  addUIBoxCode () {
+    return `var markDoneBox = document.createElement('div');
+    markDoneBox.classList.add('mlrs-mark-done');
+    markDoneBox.addEventListener('click', window.mlrsMarkDone);
+    document.body.appendChild(markDoneBox);
+    `;
+  }
+
+  async setupUI (page) {
+    return page.exposeFunction('mlrsMarkDone', () => {
+        this.markDone();
+      })
+      .then(() => page.evaluate(this.addUIBoxCode()))
+      .then(() => page.evaluateOnNewDocument(this.addUIBoxCode()))
+      .then(() => page.addStyleTag({ path: 'ui.css' }));
+  }
+
+  markDone () {
+    this.record.push('applied');
   }
 
   async getField (page, label) {
@@ -77,9 +103,10 @@ class Applier extends Transform {
         });
         const page = await browser.newPage();
         return page.goto(url)
+          .then(() => this.setupUI(page))
           .then(() => this.fillForm(page))
           .then(() => new Promise((resolve, reject) => {
-            if (!interactive) resolve();
+            if (!this.interactive) resolve();
             this.resolveWait = resolve;
           }))
           .then(() => this.callback());
