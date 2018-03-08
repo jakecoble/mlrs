@@ -1,5 +1,7 @@
 # Multi-Launch Resume System
 
+NOTE: This application is in an unfinished state and is not guaranteed to do anything useful. It should fill out some forms fine, but there are many different web forms to account for, and MLRS has not been adapted to work with most of them.
+
 A command-line tool for fetching job listings from Indeed and automating repetitive parts of the job-application process
 
 `mlrs fetch` to pull job listings from Indeed. `mlrs fire [file]` to start applying to fetched jobs. Use `mlrs --help` for a description of available options.
