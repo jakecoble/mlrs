@@ -97,7 +97,7 @@ class Applier extends Transform {
     return this.browserLoad
       .then(async browser => {
         browser.on('targetdestroyed', target => {
-          if (target.page()) {
+          if (target.page() && this.resolveWait) {
             this.resolveWait();
           }
         });
