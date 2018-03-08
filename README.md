@@ -4,7 +4,19 @@ NOTE: This application is in an unfinished state and is not guaranteed to do any
 
 A command-line tool for fetching job listings from Indeed and automating repetitive parts of the job-application process
 
+## Installation
+
+```
+git clone https://github.com/jakecoble/mlrs
+cd mlrs
+npm install -g
+```
+
+## Usage
+
 `mlrs fetch` to pull job listings from Indeed. `mlrs fire [file]` to start applying to fetched jobs. Use `mlrs --help` for a description of available options.
+
+## Explanation
 
 MLRS uses a Google Chrome browser controlled via the Puppeteer library to automate parts of the job-application process, including filling out basic information and uploading a resume.
 
