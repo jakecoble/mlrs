@@ -63,19 +63,66 @@ module.exports = {
   describe: 'download listings and write to CSV file',
   builder: yargs => {
     yargs
-      .alias({
-        'q': 'query',
-        'c': 'city',
-        'r': 'radius',
-        'le': 'level',
-        't': 'jobType',
-        'm': 'maxAge',
-        's': 'sort',
-        'li': 'limit',
-        'o': 'output'
-      })
-      .string(['radius', 'maxAge', 'limit'])
-      .demandOption(['query']);
+      .options({
+        'query': {
+          alias: 'q',
+          demandOption: true,
+          describe: 'search keywords',
+          type: 'string'
+        },
+
+        'city': {
+          alias: 'c',
+          describe: 'location to search',
+          type: 'string'
+        },
+
+        'radius': {
+          alias: 'r',
+          describe: 'radius of search in miles',
+          type: 'number'
+        },
+
+        'level': {
+          alias: 'l',
+          describe: 'job experience-level filter',
+          type: 'string',
+          choices: ['entry_level', 'mid_level', 'senior_level']
+        },
+
+        'jobType': {
+          alias: 't',
+          describe: 'job type filter',
+          type: 'string',
+          choices: ['fulltime', 'internship', 'contract', 'temporary', 'parttime']
+        },
+
+        'maxAge': {
+          alias: 'm',
+          describe: 'maximium job-listing age in days',
+          type: 'number'
+        },
+
+        'sort': {
+          alias: 's',
+          describe: 'sort results by relevance or date',
+          type: 'string',
+          choices: ['relevance', 'date']
+        },
+
+        'limit': {
+          alias: 'li',
+          describe: 'limit returned results',
+          type: 'number'
+        },
+
+        'output': {
+          alias: 'o',
+          describe: 'output file',
+          type: 'string',
+          default: './jobs.csv'
+        }
+      });
   },
   handler: fetch
 };
