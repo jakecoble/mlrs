@@ -1,5 +1,5 @@
 {
-  "name": "indeed",
+  "name": "mlrs",
   "version": "0.1.0",
   "description": "Multiple Launch Resume System for Indeed",
   "main": "index.js",
