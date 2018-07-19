@@ -1,20 +1,28 @@
 {
-  "name": "indeed",
-  "version": "1.0.0",
-  "description": "",
+  "name": "mlrs",
+  "version": "0.1.0",
+  "description": "Multiple Launch Resume System for Indeed",
   "main": "index.js",
   "bin": {
-    "indeed": "./index.js"
+    "mlrs": "./index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Jake Coble <jakecoble@users.noreply.github.com>",
   "license": "ISC",
+  "pkg": {
+    "assets": "node_modules/figlet/fonts/*"
+  },
   "dependencies": {
+    "bluebird": "^3.5.1",
     "clui": "^0.3.6",
     "csv": "^2.0.0",
+    "figlet": "^1.2.0",
+    "gradient-string": "^1.0.0",
     "indeed-scraper": "^2.0.2",
+    "puppeteer": "^0.13.0",
     "yargs": "^10.0.3"
-  }
+  },
+  "repository": "https://github.com/jakecoble/mlrs"
 }

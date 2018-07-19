@@ -1,0 +1,23 @@
+.mlrs-mark-done {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+    cursor: pointer;
+    background-color: lightgreen;
+    color: black;
+    z-index: 999;
+}
+
+.mlrs-mark-done::before {
+    content: '✓';
+    color: green;
+}
+
+.mlrs-mark-done:hover {
+    background-color: green;
+}
+
+.mlrs-mark-done:hover::before {
+    color: black;
+}
